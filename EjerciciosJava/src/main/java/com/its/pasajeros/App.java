@@ -11,6 +11,7 @@ public class App {
 	private String[] jubilado = new String[1];
 	private String[] pensionista = new String[1];
 	private String[] paradas = new String[30];
+	private int[] conexiones = new int[90];
 	private Scanner input = new Scanner(System.in);
 
 	public String boldify(String texto) {
@@ -63,7 +64,7 @@ public class App {
 		int userInput;
 		do {
 			System.out.printf(boldify("Seleccione un item del menu")
-					+ "%n1: Registrar parada. %n2: Mostrar parada. %n3: Buscar parada(existencia). %n0: Volver al menu principal.");
+					+ "%n1: Registrar parada. %n2: Mostrar parada. %n0: Volver al menu principal.");
 			userInput = input.nextInt();
 			switch (userInput) {
 			case 1:
@@ -71,9 +72,6 @@ public class App {
 				break;
 			case 2:
 				mostrarParada();
-				break;
-			case 3:
-				buscarParada();
 				break;
 			}
 		} while (userInput != 0);
@@ -99,40 +97,17 @@ public class App {
 		} while (userInput != 0);
 	}
 
-	public void buscarParada() {
-		System.out.println("Ingrese el codigo de la parada");
-		String code = "";
-		if(paradas[0] == null) {
-			System.out.println("No hay paradas");
-		} else {
-			Boolean encontrado = false;
-			int i = 0;					
-			while (!encontrado) {
-				if(paradas[i] != null) {
-					if(code.equals(paradas[i])) {
-						encontrado = true;
-						System.out.println("La parada "+paradas[i]+" existe.");
-					}
-					i += 2;
-				} else {
-					encontrado = true;
-					System.out.println("No existen coincidencias");
-				}						
+	public Boolean existeParada(String code) {
+		
+		for(int i = 0; i < paradas.length - 1; i += 2) {
+			if(paradas[i] == code) {
+				return true;
 			}
 		}
-		int opt;
-		do {
-			System.out.println("1: Volver al menu principal");
-			System.out.println("0: Salir del programa");
-			opt = input.nextInt();
-			switch(opt) {
-				case 1:
-					menuPrincipal();
-					break;	
-			}
-		} while(opt != 0);
+		
+		return false;
 	}
-	
+		
 	public void buscarPasajero() {
 		/**
 		 * mostrar un pasajero
@@ -220,54 +195,64 @@ public class App {
 		String origen, destino, km;
 		System.out.println("Ingrese el codigo de la parada de origen");
 		origen = input.next();
-		if(paradas[0] == null) {
-			System.out.println("No existe ninguna parada registrada");
-		} else {
-			int i = 0;
-			while(paradas[i] != null) {
-				if(i % 2 == 0 && paradas[i].equals(origen)) {
-					// el origen existe
-				};
-				i++;
-			}
+		Boolean existeOrigen = existeParada(origen);
+		
+		if (!existeOrigen) {
+			System.out.printf("No existe ninguna parada registrada con el codigo proporcionado.");
+			menuConexion();
 		}
-		int opt;
-		do {
-			System.out.println("1: Volver al menu principal");
-			System.out.println("2: Registrar otra");
-			System.out.println("0: Salir del programa");
-			opt = input.nextInt();
-			switch(opt) {
-				case 1:
-					menuPrincipal();
-					break;
-				case 2:
-					registrarConexion();
-					break;	
-			}
-		} while(opt != 0);
+		
+		System.out.println("Ingrese el codigo de la parada destino");
+		destino = input.next();
+		Boolean existeDestino = existeParada(destino);
+		
+		if (!existeDestino) {
+			System.out.printf("No existe ninguna parada registrada con el codigo proporcionado.");
+			menuConexion();
+		}
+		
+		System.out.println("Ingrese los kilometros");
+		km = input.next();
+		Boolean isValidKm = km.matches("^\\d*\\.?\\d+$");
+		
+		if(!isValidKm) {
+			System.out.println("El dato ingresado es incorrecto intentelo nuevamente.");
+			menuConexion();
+		}
+		
+		
+		
 	}
 	
 	public void registrarParada() {
-		if(paradas[paradas.length - 1] != null) System.out.println("No hay cupos para registrar una parada.");
-		
-		String parada, codigo;
-		System.out.println("Ingrese el codigo de la parada.");
-		codigo = input.next();
-		System.out.println("Ingrese el nombre de la parada.");
-		parada = input.next();
-		int i = 0;
-		while(paradas[i] != null && i < paradas.length) {
-			i++;
+		if(paradas[paradas.length - 1] != null) {
+			System.out.println("No hay cupos para registrar una parada.");
+		} else {
+			String parada, codigo;
+			System.out.println("Ingrese el codigo de la parada.");
+			codigo = input.next(); // Todo: Validar numero
+			System.out.println("Ingrese el nombre de la parada.");
+			parada = input.nextLine();
+			
+			Boolean existe = existeParada(codigo);
+			int lastIdx = 0;
+			while(paradas[lastIdx] != null && lastIdx < paradas.length) {
+				lastIdx++;
+			}
+			
+			if (!existe) {
+				paradas[lastIdx] = codigo;
+				paradas[lastIdx + 1] = parada;
+				System.out.println("La parada se ha registrado con exito.");
+			} else {
+				System.out.println("La parada ya existe en el sistema.");
+			}
 		}
-		paradas[i] = codigo;
-		paradas[i + 1] = parada;
-		System.out.println("La parada se ha registrado con exito.");
-		
 		menuParadas();
 	}
 	
 	public void registrarPasajero() {
+		
 		/**
 		 * PEDIR Y VALIDAR DATOS
 		 */
