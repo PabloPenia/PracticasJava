@@ -27,7 +27,7 @@ public class App {
 	public void menuPrincipal() {
 		int userInput;
 		do {
-			System.out.printf("%nSeleccione un item del menu. %n1: Menu de pasajeros. %n2: Menu de paradas. %n3: Menu de conexiones. %n0: Salir del programa.%n");
+			System.out.printf(colorize("%nSeleccione un item del menú.", "b") + "%n1: Menu de pasajeros. %n2: Menu de paradas. %n3: Menu de conexiones. %n0: Salir del programa.%n");
 			userInput = input.nextInt();
 			switch (userInput) {
 			case 1:
@@ -46,7 +46,7 @@ public class App {
 	public void menuConexion() {
 		int userInput;
 		do {
-			System.out.printf("Menu de conexiones. %n1: registrar conexion. %n2: registrar linea. %n3 mostrar conexion con mayor distancia. %n4 mostrar conexion con menor distancia. %n0. Volver al menu principal");
+			System.out.printf(colorize("Menu de conexiones.", "b") + "%n1: registrar conexion. %n2: registrar linea. %n3 mostrar conexion con mayor distancia. %n4 mostrar conexion con menor distancia. %n0. Volver al menu principal");
 			userInput = input.nextInt();
 			switch (userInput) {
 				case 1: {
@@ -72,7 +72,7 @@ public class App {
 	public void menuParadas() {
 		int userInput;
 		do {
-			System.out.printf("Seleccione un item del menu. %n1: Registrar parada. %n2: Mostrar parada. %n0: Volver al menu principal.");
+			System.out.printf(colorize("Seleccione un item del menu.", "b") + "%n1: Registrar parada. %n2: Mostrar parada. %n0: Volver al menu principal.");
 			userInput = input.nextInt();
 			switch (userInput) {
 			case 1:
@@ -88,7 +88,7 @@ public class App {
 	public void menuPasajeros() {
 		int userInput;
 		do {
-			System.out.printf("%nSeleccione un item del menu. %n1: Mostrar todos los pasajeros. %n2: Buscar un pasajero. %n3: Registrar un pasajero. %n0: Volver al menu principal.%n");
+			System.out.printf(colorize("%nSeleccione un item del menu.", "b") + "%n1: Mostrar todos los pasajeros. %n2: Buscar un pasajero. %n3: Registrar un pasajero. %n0: Volver al menu principal.%n");
 			userInput = input.nextInt();
 			switch (userInput) {
 			case 1:
@@ -116,12 +116,8 @@ public class App {
 	}
 
 	public void buscarPasajero() {
-		/**
-		 * mostrar un pasajero
-		 */
-
 		System.out.printf(
-				"%nPara buscar un pasajero ingrese: %n - numero de cedula sin puntos ni guiones. %n - O el nombre del pasajero. %n - O la categoria del pasajero para verlos todos. %nIngrese el termino de busqueda ahora o ingrese 0 para volver al menu de pasajeros:%n");
+				colorize("%nPara buscar un pasajero ingrese:", "b") + "%n - numero de cedula sin puntos ni guiones. %n - O el nombre del pasajero. %n - O la categoria del pasajero para verlos todos. %nIngrese el termino de busqueda ahora o ingrese 0 para volver al menu de pasajeros:%n");
 
 		String query = input.nextLine();
 		// WHILE NO ESTA FUNCIONANDO COMO SE ESPERA: siempre entra en default aunque el
@@ -142,7 +138,7 @@ public class App {
 				mostrarPasajeros(pasajerosCatF);
 			default: {
 				if (pasajerosTodos[0] == null) {
-					System.out.println("No hay registros que mostrar.");
+					System.out.println(colorize("No hay registros que mostrar.", "error"));
 				} else {
 					Boolean encontrado = false;
 					int i = 0;
@@ -151,14 +147,14 @@ public class App {
 							String[] registro = pasajerosTodos[i].split("@");
 							if (query.equals(registro[0]) || query.equals(registro[1])) {
 								encontrado = true;
-								System.out.println("Datos del pasajero:");
-								System.out.println("Ci: " + registro[0] + " Nombre: " + registro[1] + " Telefono: " + registro[2]
-										+ " Categoria: " + registro[3] + ".");
+								System.out.println(colorize("Datos del pasajero:", "b"));
+								System.out.println(colorize("Ci: ", "b") + registro[0] + colorize(" Nombre: ", "b") + registro[1] + colorize(" Telefono: ", "b") + registro[2]
+										+ colorize(" Categoria: ", "b") + registro[3] + ".");
 							}
 							i++;
 						} else {
 							encontrado = true;
-							System.out.println("No existen coincidencias");
+							System.out.println(colorize("No existen coincidencias", "error"));
 						}
 					}
 				}
@@ -171,7 +167,7 @@ public class App {
 
 	public void mostrarParada() {
 		if (paradas[0] == null) {
-			System.out.println("No existe ninguna parada registrada");
+			System.out.println(colorize("No existe ninguna parada registrada", "error"));
 		} else {
 			int i = 0;
 			String str = "";
@@ -195,7 +191,8 @@ public class App {
 				maxI = i;
 			}
 		}
-		System.out.printf("La conexion con mayor distancia entre paradas es: %nOrigen: " + conexiones[maxI -2] + " Destino: " + conexiones[maxI - 1] + " Distancia: " + conexiones[maxI] + "km.");
+		String mensaje = "La conexion con mayor distancia entre paradas es: %nOrigen: " + conexiones[maxI -2] + " Destino: " + conexiones[maxI - 1] + " Distancia: " + conexiones[maxI] + "km.";
+		System.out.printf(colorize(mensaje, "success"));
 		menuPrincipal();
 	}
 	
@@ -209,7 +206,8 @@ public class App {
 				minI = i;
 			}
 		}
-		System.out.printf("La conexion con menor distancia entre paradas es: %nOrigen: " + conexiones[minI -2] + " Destino: " + conexiones[minI - 1] + " Distancia: " + conexiones[minI] + "km.");
+		String mensaje = "La conexion con menor distancia entre paradas es: %nOrigen: " + conexiones[minI -2] + " Destino: " + conexiones[minI - 1] + " Distancia: " + conexiones[minI] + "km.";
+		System.out.printf(mensaje, "success");
 		menuPrincipal();
 	}
 	
@@ -218,13 +216,14 @@ public class App {
 		 * mostrar todos los pasajeros
 		 */
 		if (array[0] == null) {
-			System.out.println("No existen registros");
+			System.out.println(colorize("No existen registros", "error"));
 		} else {
 			for (int i = 0; i < array.length; i++) {
 				if (array[i] != null) {
 					String[] registro = array[i].split(d);
-					System.out.println("Ci: " + registro[0] + " Nombre: " + registro[1] + " Telefono: " + registro[2]
-							+ " Categoria: " + registro[3] + ".");
+					String mensaje = "Ci: " + registro[0] + " Nombre: " + registro[1] + " Telefono: " + registro[2]
+							+ " Categoria: " + registro[3] + ".";
+					System.out.println(colorize(mensaje, "success"));
 				}
 			}
 		}
@@ -233,7 +232,7 @@ public class App {
 
 	public void registrarConexion() {
 		if(conexiones[conexiones.length - 3] != null) {
-			System.out.println("No hay cupos para mas conexiones.");
+			System.out.println(colorize("No hay cupos para mas conexiones.", "error"));
 			menuPrincipal();
 		}
 		// ingresar / validar datos
@@ -245,7 +244,7 @@ public class App {
 		existeOrigen = existeParada(origen);
 
 		if (!existeOrigen) {
-			System.out.printf("No existe ninguna parada registrada con el codigo proporcionado.");
+			System.out.printf(colorize("No existe ninguna parada registrada con el codigo proporcionado.", "error"));
 			menuConexion();
 		}
 
@@ -254,11 +253,11 @@ public class App {
 		existeDestino = existeParada(destino);
 
 		if (!existeDestino) {
-			System.out.printf("No existe ninguna parada registrada con el codigo proporcionado.");
+			System.out.printf(colorize("No existe ninguna parada registrada con el codigo proporcionado.", "error"));
 			menuConexion();
 		}
 
-		System.out.println("Ingrese los kilometros");
+		System.out.println("Ingrese la distancia en kilometros");
 		km = input.nextLine();		
 		isValidKm = isValidNum(km);
 
@@ -283,9 +282,9 @@ public class App {
 			conexiones[idx] = origen;
 			conexiones[idx+1] = destino;
 			conexiones[idx+2] = km;
-			System.out.println("La conexion se ha registrado correctamente.");
+			System.out.println(colorize("La conexion se ha registrado correctamente.", "success"));
 		} else {
-			System.out.println("La conexion ya existe en la base de datos.");
+			System.out.println(colorize("La conexion ya existe en la base de datos.", "error"));
 		}
 	}
 
@@ -327,14 +326,14 @@ public class App {
 		if(existeConexion && !existeLinea) {
 			int indice = encontrarIndice(lineas);
 			lineas[indice] = origen + d + destino + d + linea + d + minutos + costo;
-			System.out.println("La linea se registro correctamente");
+			System.out.println(colorize("La linea se registro correctamente", "success"));
 			menuPrincipal();
 		}
 
 	}
 	public void registrarParada() {
 		if (paradas[paradas.length - 1] != null) {
-			System.out.println("No hay cupos para registrar una parada.");
+			System.out.println(colorize("No hay cupos para registrar una parada.", "error"));
 		} else {
 			String codigo, parada;
 			System.out.println("Ingrese el codigo de la parada.");
@@ -351,10 +350,10 @@ public class App {
 			if (!existe) {
 				paradas[lastIdx] = codigo;
 				paradas[lastIdx + 1] = parada;
-				System.out.println("La parada se ha registrado con exito.");
+				System.out.println(colorize("La parada se ha registrado con exito.", "success"));
 				
 			} else {
-				System.out.println("La parada ya existe en el sistema.");
+				System.out.println(colorize("La parada ya existe en el sistema.", "error"));
 			}
 		}
 		menuParadas();
@@ -363,7 +362,7 @@ public class App {
 	public void registrarPasajero() {
 		// TODO: chequear que el pasajero no exista (por la cedula)
 		if (pasajerosTodos[pasajerosTodos.length - 1] != null) {
-			System.out.println("No hay cupos para registrar nuevos pasajeros.");
+			System.out.println(colorize("No hay cupos para registrar nuevos pasajeros.", "error"));
 			menuPasajeros();
 		}
 		/**
@@ -379,13 +378,13 @@ public class App {
 		cedula = input.next();
 		Boolean isValidCi = cedula.matches("^[1-9]\\d{7}$");
 		if(!isValidCi) {
-			System.out.println("ERROR: debe ingresar un número de cédula válido.");
+			System.out.println(colorize("ERROR: debe ingresar un número de cédula válido.", "error"));
 			menuPasajeros();
 		} else {
 			for(int i = 0; i < pasajerosTodos.length; i++) {
 				String[] item = pasajerosTodos[i].split(d);
 				if(item[0] == cedula) {
-					System.out.println("ERROR: El numero de cédula ya está registrado.");
+					System.out.println(colorize("ERROR: El numero de cédula ya está registrado.", "error"));
 					menuPasajeros();
 				}
 			}
@@ -397,17 +396,17 @@ public class App {
 		telefono = input.next();
 		Boolean isValidTel = telefono.matches("\\d{7}"); // TODO: checkear regexp
 		if(!isValidTel) {
-			System.out.println("ERROR: debe ingresar un número de telefono válido.");
+			System.out.println(colorize("ERROR: debe ingresar un número de telefono válido.", "error"));
 			menuPasajeros();
 		}
 		
 		System.out.printf(
-				"Ingresar categoria del pasajero: %nA: Comun. %nB: Jubilado. %nC: Pensionista. %nD: Estudiante \"A\". %nE: Estudiante \"B\". %nF: Docente.");
+				colorize("Ingresar categoria del pasajero:", "b") + "%nA: Comun. %nB: Jubilado. %nC: Pensionista. %nD: Estudiante \"A\". %nE: Estudiante \"B\". %nF: Docente.");
 		categoria = input.next();
 		categoria = categoria.toUpperCase();
 		Boolean isValidCat = categoria.matches("[A-F]");
 		if(!isValidCat) {
-			System.out.println("ERROR: debe ingresar una categoría válida.");
+			System.out.println(colorize("ERROR: debe ingresar una categoría válida.", "error"));
 			menuPasajeros();
 		}
 		
@@ -444,6 +443,27 @@ public class App {
 	}
 
 	// Agregadas
+	private String colorize(String str, String type) {
+		String newStr;
+		String RESET = "\033[0m";
+		String BLACK = "\033[1;30m";
+		String RED = "\033[1;31m";
+		String GREEN = "\033[1;32m";
+		switch (type) {
+			case "error": {
+				newStr = RED + str + RESET;
+				break;
+			}
+			case "success": {
+				newStr = GREEN + str + RESET;
+				break;
+			}
+			default: {
+				newStr = BLACK + str + RESET;
+			}
+		}
+		return newStr;
+	}
 	private int encontrarIndice(String[] arr) {
 		int num = -1;
 		int i = 0;
@@ -462,7 +482,7 @@ public class App {
 	}
 	private void registrarCategoria(String[] arr, String dato) {
 		if (arr[arr.length - 1] != null) {
-			System.out.println("No hay mas cupos para esta categoria, intente en otra.");
+			System.out.println(colorize("No hay mas cupos para esta categoria, intente en otra.", "error"));
 			menuPasajeros();
 		}
 		// else: hay cupos identificar posicion vacia
@@ -477,7 +497,8 @@ public class App {
 		// es null, esta vacio
 		pasajerosTodos[iPasajeros] = dato;
 		arr[iTipo] = dato;
-		System.out.println("El pasajero <<" + dato + ">> ha sido registrado correctamente. ");
+		String mensaje = "El pasajero <<" + dato + ">> ha sido registrado correctamente. ";
+		System.out.println(colorize(mensaje, "success"));
 		menuPasajeros();
 	}
 
